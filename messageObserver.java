@@ -15,6 +15,7 @@ public class messageObserver implements Observer{
         ArrayList<User> users = su.getUsers();
         ArrayList<String> followers = user.getFollowers();
 
+        // updates every news feed for user's followers
         for (int i = 0; i < users.size(); i++) {
             for(int j = 0; j < followers.size(); j++) {
                 if(users.get(i).getID().equals(followers.get(j))) {

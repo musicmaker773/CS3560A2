@@ -10,4 +10,4 @@ Observer pattern is implemented in SubjectUser.java, Observer.java, and messageO
 
 Composite pattern is implemented in Entries.java, UserGroup.java, and User.java files.
 
-Visitor pattern is implemented in Visitor.java, statVisitor.java, numOfUsers.java, numOfMessages.java, numOfGroups.java, and positiveMessages.java files.
+Visitor pattern is implemented in Visitor.java, statVisitor.java, DisplayStats.java, numOfUsers.java, numOfMessages.java, numOfGroups.java, and positiveMessages.java files.

@@ -106,6 +106,8 @@ public class TwitterGUI{
         showPositiveMessage = new JButton("Show Positive Percentage");
         blankArea1 = new JPanel();
         blankArea2 = new JPanel();
+        
+        // I displayed specific stats in a label located above the "Show User Total" button
         displayOfTotals = new JLabel("");
 
 
@@ -245,7 +247,7 @@ public class TwitterGUI{
         tempUser2 = user;
 
 
-
+        // clears out the lists before uploading followers and news feed
         dlm.clear();
         for(int i = tempUser2.getNewsFeed().size() - 1; i >= 0; i--) {
             dlm.addElement(tempUser2.getNewsFeed().get(i));
@@ -324,6 +326,7 @@ public class TwitterGUI{
                 tempUser = ltp.requestUser(highlighted);
                 if(!highlighted.equals("") || !tempUser.getID().equals("")) {
 
+                    // opens up a new window for the User's UI
                     TwitterGUI userGUI = TwitterGUI.getInstance();
                     JFrame u = new JFrame(highlighted + "'s Twitter");
 
@@ -348,7 +351,8 @@ public class TwitterGUI{
                 highlighted = rp.getHighlighted();
                 if(!highlighted.equals("")) {
                     tempUser = ltp.requestUser(highlighted);
-
+                    
+                    // takes out the * in the beginning of a group name
                     StringBuilder tempSB = new StringBuilder(highlighted);
                     tempSB.deleteCharAt(0);
                     highlighted = tempSB.toString();

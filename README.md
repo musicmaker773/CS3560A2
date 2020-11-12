@@ -8,6 +8,6 @@ Singleton pattern is implemented in the Highlighter.java and TwitterGUI.java fil
 
 Observer pattern is implemented in SubjectUser.java, Observer.java, and messageObserver.java files.
 
-Composite pattern is implemented in UserGroup.java and User.java files.
+Composite pattern is implemented in Entries.java, UserGroup.java, and User.java files.
 
 Visitor pattern is implemented in Visitor.java, statVisitor.java, numOfUsers.java, numOfMessages.java, numOfGroups.java, and positiveMessages.java files.

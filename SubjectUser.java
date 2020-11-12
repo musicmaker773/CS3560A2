@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 // Subject for Observer pattern
+// This file takes in any user and updates them accordingly on the following or news feed aspect
 public class SubjectUser {
     private ArrayList<User> users;
 
@@ -11,7 +12,7 @@ public class SubjectUser {
 
     }
 
-
+    // attaches the Observer file to this file 
     public void attach(Observer observer) {
         this.observer = observer;
     }
@@ -48,7 +49,7 @@ public class SubjectUser {
                     String tweet = users.get(i).postTweet(message);
                     user = users.get(i);
 
-                    // update other users
+                    // update other users in the observer file
                     observer.update(user, tweet);
                 }
             }
@@ -62,6 +63,7 @@ public class SubjectUser {
             if(user.getID().equals(users.get(i).getID())) {
                 users.get(i).updateFollowing(following.getID());
                 user = users.get(i);
+                // updates for followers added
                 for(int j = 0; j < users.size(); j++) {
                     if(following.getID().equals(users.get(j).getID())) {
                         users.get(j).updateFollowers(user.getID());

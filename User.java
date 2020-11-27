@@ -1,4 +1,5 @@
 
+
 import java.util.ArrayList;
 
 public class User extends Entries {
@@ -9,6 +10,9 @@ public class User extends Entries {
     private ArrayList<String> newsFeed;
 
     private UserGroup parent;
+
+    private long creationTime = 0;
+    private long lastUpdateTime = 0;
 
 
     public User(String ID) {
@@ -26,6 +30,18 @@ public class User extends Entries {
     }
     public void setParent(UserGroup p) {
         parent = p;
+    }
+    public void setCreationTime(long t) {
+        creationTime = t;
+    }
+    public void setLastUpdateTime(long t) {
+        lastUpdateTime = t;
+    }
+    public long getCreationTime(){
+        return creationTime;
+    }
+    public long getLastUpdateTime() {
+        return lastUpdateTime;
     }
     public UserGroup getParent() {
         return parent;
@@ -75,3 +91,4 @@ public class User extends Entries {
     }
 
 }
+

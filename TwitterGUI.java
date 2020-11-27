@@ -15,6 +15,11 @@ public class TwitterGUI{
 
     private static TwitterGUI cb = null;
 
+    private long createTime;
+    private long lastUpdateTime;
+    private boolean IDValidation = true;
+
+
     // Assets to set up Admin's Panel
     private JTextField UserID;
     private JButton addUser;
@@ -28,6 +33,8 @@ public class TwitterGUI{
     private JPanel blankArea1;
     private JPanel blankArea2;
     private JLabel displayOfTotals;
+    private JButton lastUpdatedUser;
+    private JButton IDVerification;
 
     //Assets to set up User's Panel
     private JPanel userControl = new JPanel(new BorderLayout(3, 3));
@@ -46,6 +53,9 @@ public class TwitterGUI{
     private JPanel midList;
     private JLabel followersLabel;
     private JLabel newsLabel;
+    private JPanel bottomDisplays;
+    private JLabel displayCT;
+    private JLabel displayUT;
     private DefaultListModel dlm;
     private DefaultListModel dlm2;
 
@@ -106,9 +116,9 @@ public class TwitterGUI{
         showPositiveMessage = new JButton("Show Positive Percentage");
         blankArea1 = new JPanel();
         blankArea2 = new JPanel();
-        
-        // I displayed specific stats in a label located above the "Show User Total" button
         displayOfTotals = new JLabel("");
+        IDVerification = new JButton("Check Validation of IDs");
+        lastUpdatedUser = new JButton("Last Updated User");
 
 
         controlSection = new JPanel(new GridLayout(0, 2));
@@ -125,6 +135,8 @@ public class TwitterGUI{
         showGroupTotal.setMargin(buttonMargin);
         showMessageTotal.setMargin(buttonMargin);
         showPositiveMessage.setMargin(buttonMargin);
+        IDVerification.setMargin(buttonMargin);
+        lastUpdatedUser.setMargin(buttonMargin);
 
 
         UserID.setPreferredSize(new Dimension(200, 50));
@@ -139,6 +151,8 @@ public class TwitterGUI{
         blankArea1.setPreferredSize(new Dimension(200, 50));
         blankArea2.setPreferredSize(new Dimension(200, 50));
         displayOfTotals.setPreferredSize(new Dimension(200, 50));
+        IDVerification.setPreferredSize(new Dimension(200, 50));
+        lastUpdatedUser.setPreferredSize(new Dimension(200, 50));
 
         addUser.addActionListener(new ButtonListener());
         addGroup.addActionListener(new ButtonListener());
@@ -147,6 +161,8 @@ public class TwitterGUI{
         showGroupTotal.addActionListener(new ButtonListener());
         showMessageTotal.addActionListener(new ButtonListener());
         showPositiveMessage.addActionListener(new ButtonListener());
+        IDVerification.addActionListener(new ButtonListener());
+        lastUpdatedUser.addActionListener(new ButtonListener());
 
         controlSection.add(UserID);
         controlSection.add(addUser);
@@ -160,6 +176,8 @@ public class TwitterGUI{
         controlSection.add(showGroupTotal);
         controlSection.add(showMessageTotal);
         controlSection.add(showPositiveMessage);
+        controlSection.add(IDVerification);
+        controlSection.add(lastUpdatedUser);
 
     }
     // Initializes a specific user's UI
@@ -170,7 +188,7 @@ public class TwitterGUI{
         GridLayout layout = new GridLayout(0, 1);
         userControl.setLayout(layout);
 
-        userSection = new JPanel(new GridLayout(4, 0));
+        userSection = new JPanel(new GridLayout(5, 0));
         userSection.setBorder(new LineBorder(Color.BLACK));
 
         textUserFollow = new JTextField();
@@ -183,11 +201,15 @@ public class TwitterGUI{
         blankArea4 = new JPanel();
         followersLabel = new JLabel("Currently Following:");
         newsLabel = new JLabel("News Feed:");
+        displayCT = new JLabel("");
+        displayUT = new JLabel("");
+
 
         topButtons = new JPanel(new GridLayout(2,2));
         topList = new JPanel();
         midButtons = new JPanel(new GridLayout(2, 2));
         midList = new JPanel();
+        bottomDisplays = new JPanel(new GridLayout(1, 2));
 
         Insets buttonMargin = new Insets(0,0,0,0);
 
@@ -206,11 +228,15 @@ public class TwitterGUI{
         blankArea4.setPreferredSize(new Dimension(200, 50));
         followersLabel.setPreferredSize(new Dimension(200, 50));
         newsLabel.setPreferredSize(new Dimension(200, 50));
+        displayUT.setPreferredSize(new Dimension(200, 100));
+        displayCT.setPreferredSize(new Dimension(200, 100));
 
         topButtons.setPreferredSize(new Dimension(400, 100));
         topList.setPreferredSize(new Dimension(400, 100));
         midButtons.setPreferredSize(new Dimension(400, 100));
         midList.setPreferredSize(new Dimension(400, 100));
+        bottomDisplays.setPreferredSize(new Dimension(400, 100));
+
 
         followUser.addActionListener(new ButtonListener());
         sendTweet.addActionListener(new ButtonListener());
@@ -234,11 +260,14 @@ public class TwitterGUI{
         midButtons.add(newsLabel);
         midButtons.add(blankArea4);
         midList.add(newsFeed);
+        bottomDisplays.add(displayCT);
+        bottomDisplays.add(displayUT);
 
         userSection.add(topButtons);
         userSection.add(topList);
         userSection.add(midButtons);
         userSection.add(midList);
+        userSection.add(bottomDisplays);
 
 
     }
@@ -247,7 +276,7 @@ public class TwitterGUI{
         tempUser2 = user;
 
 
-        // clears out the lists before uploading followers and news feed
+
         dlm.clear();
         for(int i = tempUser2.getNewsFeed().size() - 1; i >= 0; i--) {
             dlm.addElement(tempUser2.getNewsFeed().get(i));
@@ -256,6 +285,8 @@ public class TwitterGUI{
         for(int i = tempUser2.getFollowing().size() - 1; i >= 0; i--) {
             dlm2.addElement(tempUser2.getFollowing().get(i));
         }
+        displayCT.setText("Creation time: " + tempUser2.getCreationTime() + " ms");
+        displayUT.setText("Last Update Time: " + tempUser2.getLastUpdateTime() + " ms");
 
 
     }
@@ -326,7 +357,6 @@ public class TwitterGUI{
                 tempUser = ltp.requestUser(highlighted);
                 if(!highlighted.equals("") || !tempUser.getID().equals("")) {
 
-                    // opens up a new window for the User's UI
                     TwitterGUI userGUI = TwitterGUI.getInstance();
                     JFrame u = new JFrame(highlighted + "'s Twitter");
 
@@ -350,15 +380,28 @@ public class TwitterGUI{
 
                 highlighted = rp.getHighlighted();
                 if(!highlighted.equals("")) {
+
                     tempUser = ltp.requestUser(highlighted);
-                    
-                    // takes out the * in the beginning of a group name
+
                     StringBuilder tempSB = new StringBuilder(highlighted);
                     tempSB.deleteCharAt(0);
                     highlighted = tempSB.toString();
                     if (tempUser.getID().equals("") || !UserID.getText().equals("")) {
+                        long startTime = System.currentTimeMillis();
+
                         ltp.addUser(UserID.getText(), highlighted);
+
+                        long stopTime = System.currentTimeMillis();
+                        createTime = stopTime - startTime;
+                        User tUser = ltp.requestUser(UserID.getText());
+                        tUser.setCreationTime(createTime);
+                        System.out.println("Creation time for " + UserID.getText() + " (user): " + createTime + " ms");
+
+                        if(IDValidation) {
+                            IDValidation = ltp.verifyIDs(tUser.getID());
+                        }
                     }
+
                 }
                 UserID.setText("");
             }
@@ -373,16 +416,38 @@ public class TwitterGUI{
                     highlighted = tempSB.toString();
 
                     if (tempUser.getID().equals("") || !GroupID.getText().equals("")) {
+                        long startTime = System.currentTimeMillis();
+
                         ltp.addUserGroup(GroupID.getText(), highlighted);
+
+                        long stopTime = System.currentTimeMillis();
+                        createTime = stopTime - startTime;
+
+                        System.out.println("Creation time for " + GroupID.getText() + " (group): " + createTime + " ms");
+                        if(IDValidation) {
+                            IDValidation = ltp.verifyIDs(GroupID.getText());
+                        }
                     }
                 }
                 GroupID.setText("");
 
             }
+            if(e.getSource() == lastUpdatedUser) {
+                displayOfTotals.setText("Last Updated User: " + ltp.getMostUpdatedUser());
+            }
+            if (e.getSource() == IDVerification) {
+                if(IDValidation) {
+                    displayOfTotals.setText("All IDs are Valid!");
+                }
+                else {
+                    displayOfTotals.setText("All IDs are Invalid!");
+                }
+            }
             if(e.getSource() == sendTweet) {
 
                 String temp = textTweet.getText();
                 if(!temp.equals("")) {
+                    long startTime = System.currentTimeMillis();
                     tempUser2 = ltp.requestUser(tempUser2.getID());
                     tempUser2 = ltp.postTweet(tempUser2, temp);
 
@@ -390,6 +455,11 @@ public class TwitterGUI{
                     for(int i = tempUser2.getNewsFeed().size() - 1; i >= 0; i--) {
                         dlm.addElement(tempUser2.getNewsFeed().get(i));
                     }
+                    long stopTime = System.currentTimeMillis();
+                    lastUpdateTime = stopTime - startTime;
+                    tempUser2.setLastUpdateTime(lastUpdateTime);
+                    ltp.updateUser2(tempUser2);
+                    displayUT.setText("Last Update Time: " + lastUpdateTime + " ms");
 
 
                 }
@@ -398,6 +468,7 @@ public class TwitterGUI{
             if(e.getSource() == followUser) {
                 String temp = textUserFollow.getText();
                 if(!temp.equals("")) {
+                    long startTime = System.currentTimeMillis();
                     tempUser2 = ltp.requestUser(tempUser2.getID());
                     tempUser2 = ltp.addFollowing(tempUser2, temp);
 
@@ -405,9 +476,15 @@ public class TwitterGUI{
                     for(int i = tempUser2.getFollowing().size() - 1; i >= 0; i--) {
                         dlm2.addElement(tempUser2.getFollowing().get(i));
                     }
+                    long stopTime = System.currentTimeMillis();
+                    lastUpdateTime = stopTime - startTime;
+                    tempUser2.setLastUpdateTime(lastUpdateTime);
+                    ltp.updateUser2(tempUser2);
+                    displayUT.setText("Last Update Time: " + lastUpdateTime + " ms");
                 }
                 textUserFollow.setText("");
             }
+
         }
     }
 }
